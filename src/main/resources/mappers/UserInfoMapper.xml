@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homolo.homolo.dao.UserServiceDao">
+
+    <resultMap id="BaseResultMap" type="com.homolo.homolo.entity.User" >
+
+        <id column="userid" property="userid"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="userpass" property="userpass" jdbcType="VARCHAR"/>
+        <result column="usernick" property="usernick"/>
+        <result column="birthday" property="birthday"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="email" property="email"/>
+        <result column="disabled" property="disabled"/>
+        <result column="mobile" property="mobile"/>
+        <result column="description" property="description"/>
+        <result column="avatar" property="avatar"/>
+        <result column="idnunber" property="idnunber"/>
+        <result column="address" property="address"/>
+        <result column="create_time" property="create_time"/>
+        <result column="update_time" property="update_time"/>
+    </resultMap>
+
+    <select id="loadUserByUserId" resultMap="BaseResultMap">
+        <![CDATA[
+            SELECT * FROM tq_user WHERE userid=#{userid}
+        ]]>
+    </select>
+
+    <select id="loadRoleByUserId" resultType="com.homolo.homolo.entity.Role">
+        <![CDATA[
+            SELECT ur.userid userid, ro.roleid roleid, ro.rolename rolename, ro.roledesc roledesc from tq_user_role ur left join tq_role ro on ur.roleid = ro.roleid where ur.userid = #{userid}
+        ]]>
+    </select>
+
+    <insert id="testI">
+        INSERT INTO testNum VALUES (default, 'qqq','wwww','eee','rrr','ttt',now());
+    </insert>
+
+    <select id="testBatchInsertProcedure">
+        call procedure_testBatch_insert(${num});
+    </select>
+
+<!--    插入测试数据-->
+    <insert id="createTestUser">
+        INSERT INTO myuser values(#{userid}, #{username}, #{usernick}, #{password}, #{birthday}, ${age}, ${sex}, #{email}, 0, #{mobile}, #{description}, #{idnunber}, #{address}, NOW(), NOW());
+    </insert>
+
+</mapper>
