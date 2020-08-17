@@ -19,7 +19,7 @@ public class SerializableUtil {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public static <T> T Deserialize(byte [] bytes, Class<T> type) throws IOException, ClassNotFoundException {
+	public static <T> T deserialize(byte [] bytes, Class<T> type) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
 		return type.cast(ois.readObject());
 	}

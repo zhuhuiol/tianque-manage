@@ -1,12 +1,10 @@
-package com.homolo.homolo.entity;
+package com.homolo.homolo.entity.system;
 
 import com.homolo.homolo.annotations.TestAutowired;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +15,7 @@ import java.util.List;
  * @Create 2019-08-23  下午12:18
  */
 @Service
-@Data
-public class User implements Serializable, UserDetails {
+public class User implements UserDetails {
 
 	private String userid;
 
@@ -48,6 +45,8 @@ public class User implements Serializable, UserDetails {
 	private String idnunber;
 
 	private String address;
+
+	private int valid;
 
 	private Date create_time;
 
@@ -120,11 +119,19 @@ public class User implements Serializable, UserDetails {
 	}
 
 	public Date getBirthday() {
-		return birthday;
+		if (this.birthday != null) {
+			return new Date(this.birthday.getTime());
+		} else {
+			return null;
+		}
 	}
 
 	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+		if (birthday != null) {
+			this.birthday = (Date) birthday.clone();
+		} else {
+			this.birthday = null;
+		}
 	}
 
 	public int getAge() {
@@ -204,19 +211,35 @@ public class User implements Serializable, UserDetails {
 	}
 
 	public Date getCreate_time() {
-		return create_time;
+		if (this.create_time != null) {
+			return new Date(this.create_time.getTime());
+		} else {
+			return null;
+		}
 	}
 
 	public void setCreate_time(Date create_time) {
-		this.create_time = create_time;
+		if (create_time != null) {
+			this.create_time = (Date) create_time.clone();
+		} else {
+			this.create_time = null;
+		}
 	}
 
 	public Date getUpdate_time() {
-		return update_time;
+		if (this.update_time != null) {
+			return new Date(this.update_time.getTime());
+		} else {
+			return null;
+		}
 	}
 
 	public void setUpdate_time(Date update_time) {
-		this.update_time = update_time;
+		if (update_time != null) {
+			this.update_time = (Date) update_time.clone();
+		} else {
+			this.update_time = null;
+		}
 	}
 
 	public Object getDetails() {
@@ -241,5 +264,13 @@ public class User implements Serializable, UserDetails {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public int getValid() {
+		return valid;
+	}
+
+	public void setValid(int valid) {
+		this.valid = valid;
 	}
 }

@@ -1,26 +1,25 @@
 package com.homolo.homolo.controller;
 
-import com.homolo.homolo.entity.User;
+import com.homolo.homolo.constants.ReturnCode;
+import com.homolo.homolo.entity.system.User;
 import com.homolo.homolo.service.impl.UserDateilServiceImpl;
 import com.homolo.homolo.spring.ExecutorConfig;
 import com.homolo.homolo.utils.AsyncUtil;
-import com.homolo.homolo.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 
@@ -120,6 +119,14 @@ public class TestCodeController {
 
 
 
+	@RequestMapping(value = "/testMessage")
+	@ResponseBody
+	public Object testMessage(HttpServletRequest request, HttpServletResponse response) {
+		HashMap hashMap = new HashMap();
+		hashMap.put("code", ReturnCode.SUCCESS);
+		hashMap.put("msg", "请求成功！");
+		return hashMap;
+	}
 
 
 

@@ -1,12 +1,11 @@
 package com.homolo.homolo.spring;
 
 import com.homolo.homolo.constants.ReturnCode;
-import com.homolo.homolo.entity.User;
+import com.homolo.homolo.entity.system.User;
 import com.homolo.homolo.entity.logs.LoginLog;
 import com.homolo.homolo.enums.LoginLogType;
 import com.homolo.homolo.filters.CustomLoginFilter;
 import com.homolo.homolo.provider.CustomProvider;
-import com.homolo.homolo.result.ServiceResult;
 import com.homolo.homolo.service.LoginLogService;
 import com.homolo.homolo.service.impl.UserDateilServiceImpl;
 import com.homolo.homolo.utils.UUIDUtil;
@@ -36,7 +35,6 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -233,7 +231,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		User user = (User) authentication.getDetails();
 		WebAuthenticationDetails details = (WebAuthenticationDetails) user.getDetails();
 		String ip = details.getRemoteAddress();
-		log.setId(UUIDUtil.generateUUID(UUIDUtil.type.LOG));
+		log.setId(UUIDUtil.generateUUID(UUIDUtil.Type.LOG));
 		log.setUserName(username.toString());
 		log.setIp(ip);
 		log.setLoginDate(new Date());
@@ -262,7 +260,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		} else {
 			ip = request.getHeader("x-forwarded-for");
 		}
-		log.setId(UUIDUtil.generateUUID(UUIDUtil.type.LOG));
+		log.setId(UUIDUtil.generateUUID(UUIDUtil.Type.LOG));
 		log.setUserName(request.getParameter("username"));
 		log.setIp(ip);
 		log.setLoginDate(new Date());

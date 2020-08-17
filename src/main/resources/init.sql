@@ -1,24 +1,64 @@
 use tianque;
+
+-- 组织表
+DROP TABLE IF EXISTS `tq_team`;
+CREATE TABLE `tq_team`  (
+  `TEAMID` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织id',
+  `TEAMNAME` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '组织名\r\n',
+  `INDEX` int(255) NULL DEFAULT NULL COMMENT '排序',
+  `DESCRIBE` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `CREATEDATE` datetime(0) NOT NULL COMMENT '创建时间',
+  `CREATOR` int(255) NOT NULL COMMENT '创建人id',
+  `CREATORNAME` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人名字',
+  `UPDATETIME` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `VALID` int(11) NOT NULL COMMENT '是否有效',
+  `SUPERID` int(11) NULL DEFAULT NULL COMMENT '上级部门',
+  PRIMARY KEY (`TEAMID`) USING BTREE,
+  INDEX `IDINDEX`(`TEAMID`, `INDEX`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- 用户join组织表
+-- tq_user_team
+DROP TABLE IF EXISTS `tq_user_team`;
+CREATE TABLE `tq_user_team`  (
+  `USERID` int(11) NOT NULL,
+  `TEAMID` int(255) NOT NULL,
+  INDEX `USER_TEAM`(`USERID`, `TEAMID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
 --  用户表
 select * from tq_user;
-CREATE TABLE `tq_user` (
+DROP TABLE IF EXISTS `tq_user`;
+CREATE TABLE `tq_user`  (
   `USERID` int(11) NOT NULL AUTO_INCREMENT,
-  `PASSWORD` varchar(150) NOT NULL COMMENT '密码',
-  `BIRTHDAY` datetime DEFAULT NULL COMMENT '生日',
-  `AGE` int(11) DEFAULT NULL COMMENT '年龄',
-  `SEX` int(11) DEFAULT NULL COMMENT '性别',
-  `EMAIL` varchar(45) DEFAULT NULL COMMENT '邮箱',
-  `DISABLED` int(11) DEFAULT NULL COMMENT '是否禁用',
-  `MOBILE` varchar(45) DEFAULT NULL COMMENT '手机号码',
-  `DESCRIPTION` varchar(45) DEFAULT NULL COMMENT '个人简介',
-  `AVATAR` varchar(45) DEFAULT NULL,
-  `IDNUMBER` varchar(45) DEFAULT NULL COMMENT '身份证号码',
-  `ADDRESS` varchar(200) DEFAULT NULL COMMENT '地址',
-  `CREATE_TIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `UPDATE_TIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`USERID`),
-  UNIQUE KEY `USERNIKE_UNIQUE` (`USERID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  `PASSWORD` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `BIRTHDAY` datetime(0) NULL DEFAULT NULL COMMENT '生日',
+  `AGE` int(11) NULL DEFAULT NULL COMMENT '年龄',
+  `SEX` int(11) NULL DEFAULT NULL COMMENT '性别',
+  `EMAIL` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `DISABLED` int(11) NULL DEFAULT NULL COMMENT '是否禁用',
+  `MOBILE` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号码',
+  `DESCRIPTION` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '个人简介',
+  `AVATAR` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `IDNUMBER` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '身份证号码',
+  `ADDRESS` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
+  `CREATE_TIME` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `UPDATE_TIME` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `VALID` int(11) NOT NULL,
+  PRIMARY KEY (`USERID`) USING BTREE,
+  UNIQUE INDEX `USERNIKE_UNIQUE`(`USERID`) USING BTREE,
+  UNIQUE INDEX `USER_TEAM`(`VALID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 
  -- 初始化一个账号--
 insert into tq_user(password, birthday, age,sex, email, disabled,mobile, description, idnumber, address) 
@@ -94,8 +134,30 @@ CREATE TABLE `tq_loginlog` (
  select * from tq_loginlog;
  -- 操作日志表
 
-
-
 select * from tq_operationlog;
+
+-- 菜单 --> 操作
+-- 菜单表table
+DROP TABLE IF EXISTS `tq_menu`;
+CREATE TABLE `tq_menu`  (
+  `MENUID` int(11) NOT NULL AUTO_INCREMENT COMMENT '菜单id',
+  `MENUNAME` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
+  `SUPERID` int(11) NULL DEFAULT NULL COMMENT '上级菜单id',
+  `URL` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单地址',
+  `ICON` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
+  `INDEX` int(255) NULL DEFAULT NULL COMMENT '排序',
+  PRIMARY KEY (`MENUID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ----角色与菜单和操作的对应关系---
+-- 角色join菜单表table
+
+-- 单个用户和菜单和操作的对应关系---
+-- 用户join菜单表table
+
+-- 菜单join操作表table
+
 
 

@@ -19,15 +19,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 public class ExecutorConfig {
 
-	private static ThreadPoolTaskExecutor executor;
+	private static ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
-	private static ExecutorService executorService;
+	private static ExecutorService executorService = Executors.newCachedThreadPool();
 
 	@Bean(name = "executor")
 	public Executor asynsServiceExecutor() {
-		if (executor == null) {
-			executor = new ThreadPoolTaskExecutor();
-		}
 		executor.setCorePoolSize(300); //核心线程数
 		executor.setMaxPoolSize(500); //最大线程数
 		executor.setQueueCapacity(9999); //等待执行线程的队列大小
@@ -39,9 +36,6 @@ public class ExecutorConfig {
 
 	@Bean(name = "executorService")
 	public Executor executorService() {
-		if (executorService == null) {
-			executorService = Executors.newCachedThreadPool();
-		}
 		return executorService;
 	}
 	public static ThreadPoolTaskExecutor getExecutor() {

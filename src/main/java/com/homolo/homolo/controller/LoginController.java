@@ -50,18 +50,18 @@ public class LoginController {
 	@RequestMapping(value = "/api/pwdEncrypt")
 	@ResponseBody
 	public Object pwdEncrypt(HttpServletRequest request, @RequestBody Map<Object, Object> params)  {
-		String zhpw = (String) params.get("password");
+		String zhpw = (String) params.get("cryptVal");
 		Map<String, Object> map = new HashMap<>();
 		map.put("code", ReturnCode.FAILURE);
 		if (zhpw == null) {
 			map.put("msg", "参数为空");
 			return map;
 		}
-		String password = null;
+		String cryptVal = null;
 		try {
-			password = Rc4Util.getEnData(zhpw, Rc4Util.key);
-			map.put("password", password);
-			logger.info("password:" + password);
+			cryptVal = Rc4Util.getEnData(zhpw, Rc4Util.key);
+			map.put("cryptVal", cryptVal);
+			logger.info("cryptVal:" + cryptVal);
 			map.put("code", ReturnCode.SUCCESS);
 			return map;
 		} catch (UnsupportedEncodingException e) {

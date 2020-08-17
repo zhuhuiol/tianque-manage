@@ -1,7 +1,7 @@
 package com.homolo.homolo.aspect;
 
 import com.homolo.homolo.annotations.SystemLog;
-import com.homolo.homolo.entity.User;
+import com.homolo.homolo.entity.system.User;
 import com.homolo.homolo.entity.logs.OperationLog;
 import com.homolo.homolo.enums.LogType;
 import com.homolo.homolo.enums.OperationLogType;
@@ -87,7 +87,7 @@ public class OperationLogAspect {
 			OperationLog log = new OperationLog();
 			log.setCreateDate(new Date());
 			log.setDescription(operationName);
-			log.setId(UUIDUtil.generateUUID(UUIDUtil.type.LOG));
+			log.setId(UUIDUtil.generateUUID(UUIDUtil.Type.LOG));
 			log.setMethod(joinPoint.getSignature().getName());
 			log.setOperationType(operationLogType.name());
 			log.setRequestIp(ip);

@@ -11,13 +11,23 @@ import java.security.NoSuchAlgorithmException;
  * @Description:
  * @Date: 19-9-24 下午4:04
  */
-public class encryptionTest {
+public class EncryptionTest {
 
 	public static final String text = "zhuhui";
 	@Test
 	public void test1() throws NoSuchAlgorithmException {
 		String str = EncryptionUtil.getBCryptEnCode("zhuhui");
 		System.out.println(str);
+	}
+
+	@Test
+	public void test2() throws NoSuchAlgorithmException {
+		String str = "你好啊";
+		String s = EncryptionUtil.aesEncrypt(str);
+		System.out.println("加密"+s);
+		String s1 = EncryptionUtil.aesDecrypt(s);
+		System.out.println("解密"+s1);
+
 	}
 
 

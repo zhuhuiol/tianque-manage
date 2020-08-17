@@ -1,9 +1,8 @@
 package com.homolo.homolo.dao;
 
-import com.homolo.homolo.entity.Role;
-import com.homolo.homolo.entity.User;
+import com.homolo.homolo.entity.system.Role;
+import com.homolo.homolo.entity.system.User;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**

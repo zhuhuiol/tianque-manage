@@ -1,9 +1,11 @@
-package com.homolo.homolo.entity;
+package com.homolo.homolo.entity.system;
+
+import java.io.Serializable;
 
 /**
  * 权限.
  */
-public class Role {
+public class Role implements Serializable {
 
     private String rolename;
     private String roledesc;

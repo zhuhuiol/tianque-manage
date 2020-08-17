@@ -1,4 +1,9 @@
 spring:
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/tianque?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CTT
     driverClassName: com.mysql.cj.jdbc.Driver

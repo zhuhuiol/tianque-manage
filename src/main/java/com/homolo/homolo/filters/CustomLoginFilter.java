@@ -1,5 +1,6 @@
 package com.homolo.homolo.filters;
 
+import com.homolo.homolo.utils.EncryptionUtil;
 import com.homolo.homolo.utils.Rc4Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,8 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		password = Rc4Util.getDeData(password, Rc4Util.key);
+		username = EncryptionUtil.aesDecrypt(username);
+		password = EncryptionUtil.aesDecrypt(password);
 		UsernamePasswordAuthenticationToken token =  new UsernamePasswordAuthenticationToken(username, password);
 		token.setDetails(authenticationDetailsSource.buildDetails(request));
 		return getAuthenticationManager().authenticate(token);

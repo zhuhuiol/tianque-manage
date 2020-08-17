@@ -1,13 +1,11 @@
 package com.homolo.homolo.entity.logs;
 
-import lombok.Data;
-
 import java.util.Date;
 
 /**
  * 系统用户登录日志.
  */
-@Data
+
 public class LoginLog {
 
 	private String id;
@@ -23,4 +21,68 @@ public class LoginLog {
 	private int result;
 	//消息描述
 	private String message;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Date getLoginDate() {
+		if (this.loginDate != null) {
+			return new Date(this.loginDate.getTime());
+		} else {
+			return null;
+		}
+	}
+
+	public void setLoginDate(Date loginDate) {
+		if (loginDate != null) {
+			this.loginDate = (Date) loginDate.clone();
+		} else {
+			this.loginDate = null;
+		}
+	}
+
+	public String getLoginLogType() {
+		return loginLogType;
+	}
+
+	public void setLoginLogType(String loginLogType) {
+		this.loginLogType = loginLogType;
+	}
+
+	public int getResult() {
+		return result;
+	}
+
+	public void setResult(int result) {
+		this.result = result;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }

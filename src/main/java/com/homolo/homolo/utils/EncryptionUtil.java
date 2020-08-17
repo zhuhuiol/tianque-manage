@@ -4,18 +4,14 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 
 import static sun.security.x509.CertificateAlgorithmId.ALGORITHM;
 
@@ -35,11 +31,11 @@ public class EncryptionUtil {
 	private static final String MD5 = "MD5";
 	private static final String MD2 = "MD2";
 
-	private static final String CIPHER_ALGORITHM = "AES"; // 默认的加密算法，CBC模式 /CBC/PKCS5Padding
+	private static final String CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding"; // 默认的加密算法， ECB/AES/PKCS5Padding
 
-	private static final String AES_KEY = "zhspringbootyyyy"; // 密匙，必须16位
+	private static final String AES_KEY = "0880076B18D7EE81"; // 密匙，必须16位
 
-	private static final String AES_OFFSET = "5e8y6w45ju8w9jq8"; // 偏移量
+	private static final String AES_OFFSET = "CB3EC842D7C69578"; // 偏移量
 
 	private static final String ENCODING = "UTF-8"; // 编码
 
@@ -74,9 +70,9 @@ public class EncryptionUtil {
 		MessageDigest messageDigest = null;
 		try {
 			messageDigest = MessageDigest.getInstance(key);
-			messageDigest.update(obj.getBytes());
+			messageDigest.update(obj.getBytes("UTF-8"));
 			return getText(messageDigest.digest());
-		} catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -115,36 +111,29 @@ public class EncryptionUtil {
 
 	/**
 	 * AES加密.
-	 * @param data c
+	 * @param cleartext c
 	 * @return c
 	 * @throws Exception c
 	 */
-	public static String aesEncrypt(String data) {
-		byte[] encrypted = new byte[0];
-		String val = "";
+	public static String aesEncrypt(String cleartext) {
+		//加密方式： AES128(CBC/PKCS5Padding) + Base64
 		try {
-			Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-			SecretKeySpec skeySpec = new SecretKeySpec(AES_KEY.getBytes("ASCII"), ALGORITHM);
-			IvParameterSpec iv = new IvParameterSpec(AES_OFFSET.getBytes()); //CBC模式偏移量IV
-			cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-			encrypted = cipher.doFinal(data.getBytes(ENCODING));
-			val = new Base64().encodeToString(encrypted); //加密后再使用BASE64做转码
-		} catch (NoSuchAlgorithmException e) {
+//			IvParameterSpec zeroIv = new IvParameterSpec(AES_OFFSET.getBytes());
+			//两个参数，第一个为私钥字节数组， 第二个为加密方式 AES或者DES
+			SecretKeySpec key = new SecretKeySpec(AES_KEY.getBytes("UTF-8"), "AES");
+			//实例化加密类，参数为加密方式，要写全
+			Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM); //PKCS5Padding比PKCS7Padding效率高，PKCS7Padding可支持IOS加解密
+			//初始化，此方法可以采用三种方式，按加密算法要求来添加。（1）无第三个参数（2）第三个参数为SecureRandom random = new SecureRandom();中random对象，随机数。(AES不可采用这种方法)（3）采用此代码中的IVParameterSpec
+			//加密时使用:ENCRYPT_MODE;  解密时使用:DECRYPT_MODE;
+			cipher.init(Cipher.ENCRYPT_MODE, key); //CBC类型的可以在第三个参数传递偏移量zeroIv,ECB没有偏移量
+			//加密操作,返回加密后的字节数组，然后需要编码。主要编解码方式有Base64, HEX, UUE,7bit等等。此处看服务器需要什么编码方式
+			byte[] encryptedData = cipher.doFinal(cleartext.getBytes(ENCODING));
+
+			return new BASE64Encoder().encode(encryptedData);
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
+			return "";
 		}
-		return val;
 	}
 
 	/**
@@ -154,32 +143,22 @@ public class EncryptionUtil {
 	 * @throws Exception c
 	 */
 	public static String aesDecrypt(String data) {
-		byte[] encrypted = new byte[0];
-		String val = "";
 		try {
+			byte[] byteMi = new BASE64Decoder().decodeBuffer(data);
+//			IvParameterSpec zeroIv = new IvParameterSpec(AES_OFFSET.getBytes());
+			SecretKeySpec key = new SecretKeySpec(
+					AES_KEY.getBytes("UTF-8"), "AES");
 			Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-			SecretKeySpec skeySpec = new SecretKeySpec(AES_KEY.getBytes("ASCII"), ALGORITHM);
-			IvParameterSpec iv = new IvParameterSpec(AES_OFFSET.getBytes()); //CBC模式偏移量IV
-			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-			byte[] buffer = new Base64().decode(data); //先用base64解码
-			encrypted = cipher.doFinal(buffer);
-			val = new String(encrypted, ENCODING);
-		} catch (NoSuchAlgorithmException e) {
+			//与加密时不同MODE:Cipher.DECRYPT_MODE
+			cipher.init(Cipher.DECRYPT_MODE, key);  //CBC类型的可以在第三个参数传递偏移量zeroIv,ECB没有偏移量
+			byte[] decryptedData = cipher.doFinal(byteMi);
+			return new String(decryptedData, ENCODING);
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
+			return "";
 		}
-		return val;
 	}
+
+
 
 }

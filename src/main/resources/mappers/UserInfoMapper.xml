@@ -5,7 +5,7 @@
 
 <mapper namespace="com.homolo.homolo.dao.UserServiceDao">
 
-    <resultMap id="BaseResultMap" type="com.homolo.homolo.entity.User" >
+    <resultMap id="BaseResultMap" type="com.homolo.homolo.entity.system.User" >
 
         <id column="userid" property="userid"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
@@ -21,6 +21,7 @@
         <result column="avatar" property="avatar"/>
         <result column="idnunber" property="idnunber"/>
         <result column="address" property="address"/>
+        <result column="valid" property="valid"/>
         <result column="create_time" property="create_time"/>
         <result column="update_time" property="update_time"/>
     </resultMap>
@@ -31,7 +32,7 @@
         ]]>
     </select>
 
-    <select id="loadRoleByUserId" resultType="com.homolo.homolo.entity.Role">
+    <select id="loadRoleByUserId" resultType="com.homolo.homolo.entity.system.Role">
         <![CDATA[
             SELECT ur.userid userid, ro.roleid roleid, ro.rolename rolename, ro.roledesc roledesc from tq_user_role ur left join tq_role ro on ur.roleid = ro.roleid where ur.userid = #{userid}
         ]]>

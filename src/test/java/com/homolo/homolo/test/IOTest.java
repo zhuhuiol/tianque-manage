@@ -1,16 +1,9 @@
 package com.homolo.homolo.test;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 
 /**
  * @Author: ZH
@@ -24,20 +17,20 @@ public class IOTest {
 	 */
 	@Test
 	public void test1() {
-		try {
-			//流转文件
-			InputStream inputStream = new FileInputStream("/home/homolo/桌面/工单测试报文xml");
-			File file = File.createTempFile("test", ".txt", new File("/home/homolo/桌面/"));
-			OutputStream outputStream = new FileOutputStream(file);
-			IOUtils.copy(inputStream, outputStream);
-			inputStream.close();
-			outputStream.flush();
-			outputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			//流转文件
+//			InputStream inputStream = new FileInputStream("/home/homolo/桌面/工单测试报文xml");
+//			File file = File.createTempFile("test", ".txt", new File("/home/homolo/桌面/"));
+//			OutputStream outputStream = new FileOutputStream(file);
+//			IOUtils.copy(inputStream, outputStream);
+//			inputStream.close();
+//			outputStream.flush();
+//			outputStream.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	/**

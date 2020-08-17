@@ -8,7 +8,7 @@ public class UUIDUtil {
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		return uuid;
 	}
-	public static String generateUUID(type type) {
+	public static String generateUUID(Type type) {
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		uuid = type.name() + uuid.substring(3, uuid.length());
 		return uuid;
@@ -19,7 +19,7 @@ public class UUIDUtil {
 	/**
 	 * uuid产生类型.
 	 */
-	public static enum type {
+	public static enum Type {
 		LOG
 
 	}

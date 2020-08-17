@@ -1,4 +1,4 @@
-package com.homolo.homolo.ThreadTest;
+package com.homolo.homolo.test.ThreadTest;
 
 import lombok.SneakyThrows;
 import org.junit.Test;
@@ -14,8 +14,8 @@ public class ThreadWaitTest {
 
     static Object o = new Object();
     public static void main(String[] args) throws InterruptedException {
-        Thread t1 = new one();
-        Thread t2 = new owt();
+        Thread t1 = new One();
+        Thread t2 = new Owt();
         t1.start();
         t2.start();
         t1.join();
@@ -23,23 +23,24 @@ public class ThreadWaitTest {
 
     }
 
-    public static class one extends Thread{
+    public static class One extends Thread{
         @Override
         public void run() {
             synchronized (o) {
                 System.out.println("T1开始...");
                 System.out.println("T1等待...");
-                try {
-                    o.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                findbugs报错,先注释
+//                try {
+//                    o.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 System.out.println("T1结束...");
             }
         }
     }
 
-    public static class owt extends Thread{
+    public static class Owt extends Thread{
         @SneakyThrows
         @Override
         public void run() {

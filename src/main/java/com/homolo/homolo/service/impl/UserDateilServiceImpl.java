@@ -3,7 +3,7 @@ package com.homolo.homolo.service.impl;
 import com.homolo.homolo.annotations.SystemLog;
 import com.homolo.homolo.dao.AccountServiceDao;
 import com.homolo.homolo.dao.UserServiceDao;
-import com.homolo.homolo.entity.Role;
+import com.homolo.homolo.entity.system.Role;
 import com.homolo.homolo.enums.LogType;
 import com.homolo.homolo.enums.OperationLogType;
 import org.apache.commons.lang3.time.StopWatch;
@@ -45,7 +45,7 @@ public class UserDateilServiceImpl implements UserDetailsService {
 		if (map == null) {
 			throw new UsernameNotFoundException("用户不存在");
 		}
-		com.homolo.homolo.entity.User userInfo = this.userServiceDao.loadUserByUserId(map.get("userid").toString());
+		com.homolo.homolo.entity.system.User userInfo = this.userServiceDao.loadUserByUserId(map.get("userid").toString());
 		if (userInfo == null) {
 			throw new UsernameNotFoundException("id存在，但是用户不存在");
 		}

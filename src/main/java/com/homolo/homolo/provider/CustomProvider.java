@@ -1,6 +1,6 @@
 package com.homolo.homolo.provider;
 
-import com.homolo.homolo.entity.User;
+import com.homolo.homolo.entity.system.User;
 import com.homolo.homolo.service.impl.UserDateilServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

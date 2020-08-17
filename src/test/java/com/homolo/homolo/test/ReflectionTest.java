@@ -53,7 +53,7 @@ public class ReflectionTest {
         System.out.println("test field static result:" + linF.get(o));
         //返回对象
         ReflectionEntity o1 = (ReflectionEntity) o;
-
+        System.out.println("o1:" + o1.getName());
     }
 
     /**
@@ -80,11 +80,11 @@ public class ReflectionTest {
 
     @Test
     public void test3() throws BrokenBarrierException, InterruptedException {
-        ArrayList arrayList = new ArrayList();
-        arrayList.ensureCapacity(10);
-        LinkedList linkedList = new LinkedList();
-        HashMap hashMap = new HashMap(10, 0.8F);
-        Hashtable hashtable = new Hashtable(10, 0.8F);
+//        ArrayList arrayList = new ArrayList();
+//        arrayList.ensureCapacity(10);
+//        LinkedList linkedList = new LinkedList();
+//        HashMap hashMap = new HashMap(10, 0.8F);
+//        Hashtable hashtable = new Hashtable(10, 0.8F);
 
     }
 
@@ -97,7 +97,7 @@ public class ReflectionTest {
 
         String b[] = {"2", "3", "4", "5"};
         Integer[] integers = Convert.toIntArray(b);
-        System.out.println(integers);
+        System.out.println(integers.length);
     }
 
 
@@ -106,7 +106,8 @@ public class ReflectionTest {
      * 在当对象没有引用时，垃圾收集时 触发finalize方法，是否与外界进行引用，只触发一次。
      */
     public static class FinalizeEscapeCG {
-        public static FinalizeEscapeCG SAVE_HOOk = null;
+
+        static FinalizeEscapeCG SAVE_HOOk = null;
 
         public void isAlive() {
             System.out.println("爸爸还在！");
@@ -160,9 +161,9 @@ public class ReflectionTest {
             ClassLoader myClassLoader = new ClassLoader() {
                 @Override
                 public Class<?> loadClass(String name) throws ClassNotFoundException {
-                    try {
-                        String fileName  = name.substring(name.lastIndexOf(".") + 1) + ".class";
-                        InputStream is= getClass().getResourceAsStream(fileName);
+                    String fileName  = name.substring(name.lastIndexOf(".") + 1) + ".class";
+
+                    try (InputStream is = getClass().getResourceAsStream(fileName)) {
                         if (is == null) {
                             return super.loadClass(name);
                         }
@@ -189,16 +190,13 @@ public class ReflectionTest {
      * 他们的区别：countDownLatch只能使用一次，而CyclicBarrier方法可以使用reset()方法重置，
      * 所以CyclicBarrier方法可以能处理更为复杂的业务场景。
      */
-    public static class VolatileTest{
-        public static VolatileTest volatileTest;
+    protected static class VolatileTest{
+        public static final VolatileTest volatileTest = new VolatileTest();
         public static VolatileTest getEntity() {
-            if (volatileTest == null) {
-                volatileTest = new VolatileTest();
-            }
             return volatileTest;
         }
-        private static final int RACE_TH_NUM = 20; //线程数量
-        public static int race = 0;  //变量初始值
+        static int RACE_TH_NUM = 20; //线程数量
+        static int race = 0;  //变量初始值
         public void raceAdd() {         //变量累加方法
             synchronized(this) {
                 race++;
