@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homolo.homolo.dao.MenuDao">
+
+    <resultMap id="BaseResultMap" type="com.homolo.homolo.entity.system.Menu" >
+
+        <id column="menuId" property="menuId"/>
+        <result column="menuname" property="menuName"/>
+        <result column="parentId" property="parentId"/>
+        <result column="url" property="url"/>
+        <result column="icon" property="icon"/>
+        <result column="menuindex" property="index"/>
+    </resultMap>
+
+    <select id="searchAll" resultMap="BaseResultMap">
+        <![CDATA[
+            SELECT * FROM tq_menu order by menuindex
+        ]]>
+    </select>
+
+    <select id="searchById" resultMap="BaseResultMap">
+        <![CDATA[
+            SELECT * FROM tq_menu WHERE MENUID = ${id}
+        ]]>
+    </select>
+
+    <select id="searchByParentId" resultMap="BaseResultMap">
+        <![CDATA[
+            SELECT * FROM tq_menu WHERE PARENTID = ${parentId} order by menuindex
+        ]]>
+    </select>
+
+    <select id="searchByIds" resultMap="BaseResultMap" parameterType="java.util.List">
+        SELECT * FROM tq_menu WHERE MENUID IN
+        <foreach collection="list" index="index" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+
+    <insert id="createMenu">
+        insert into tq_menu(menuname,PARENTID,URL,ICON,MENUINDEX) VALUES(#{menuName}, ${parentId}, #{url}, #{icon}, ${index})
+    </insert>
+
+
+    <update id="updateMenu">
+        update tq_menu
+        <set>
+            <if test="menuName != null">
+                menuname = #{menuName}
+            </if>
+            <if test="parentId != null">
+                parentid = ${parentId}
+            </if>
+            <if test="url != null">
+                url = #{url}
+            </if>
+            <if test="icon != null">
+                icon = #{icon}
+            </if>
+            <if test="index != null">
+                MENUINDEX = ${index}
+            </if>
+        </set>
+        where id = ${menuId}
+    </update>
+
+    <delete id="removeMenu">
+        delete from tq_menu where menuid = ${id}
+    </delete>
+
+
+</mapper>

@@ -15,6 +15,11 @@ public class ReturnCode {
 	 * 失败.
 	 */
 	public static final int FAILURE = 9;
+
+	/**
+	 * 未登录.
+	 */
+	public static final int NOTLOGIN = 8;
 	/**
 	 * 未找到.
 	 */

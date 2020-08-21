@@ -13,7 +13,7 @@ public class Menu {
 
     private String menuName;
 
-    private int superId;
+    private int parentId;
 
     private String url;
 
@@ -38,12 +38,12 @@ public class Menu {
         this.menuName = menuName;
     }
 
-    public int getSuperId() {
-        return superId;
+    public int getParentId() {
+        return parentId;
     }
 
-    public void setSuperId(int superId) {
-        this.superId = superId;
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
     }
 
     public String getUrl() {

@@ -25,6 +25,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -99,12 +100,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
 				.logoutUrl("/logout")
 				.logoutSuccessUrl("/login")
-				.addLogoutHandler(this.logoutHandler())
 				.clearAuthentication(true)
 				.invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID").permitAll();
+				.deleteCookies("JSESSIONID").permitAll()
+				.addLogoutHandler(this.logoutHandler()).and().exceptionHandling().authenticationEntryPoint(macLoginUrlAuthenticationEntryPoint());
 
 
+	}
+
+	@Bean
+	public AuthenticationEntryPoint macLoginUrlAuthenticationEntryPoint() {
+		return new MacLoginUrlAuthenticationEntryPoint("/login");
 	}
 
 	/**

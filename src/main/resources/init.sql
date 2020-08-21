@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS `tq_team`;
 CREATE TABLE `tq_team`  (
   `TEAMID` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织id',
   `TEAMNAME` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '组织名\r\n',
-  `INDEX` int(255) NULL DEFAULT NULL COMMENT '排序',
+  `TEAMINDEX` int(255) NULL DEFAULT NULL COMMENT '排序',
   `DESCRIBE` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   `CREATEDATE` datetime(0) NOT NULL COMMENT '创建时间',
   `CREATOR` int(255) NOT NULL COMMENT '创建人id',
@@ -14,7 +14,7 @@ CREATE TABLE `tq_team`  (
   `VALID` int(11) NOT NULL COMMENT '是否有效',
   `SUPERID` int(11) NULL DEFAULT NULL COMMENT '上级部门',
   PRIMARY KEY (`TEAMID`) USING BTREE,
-  INDEX `IDINDEX`(`TEAMID`, `INDEX`) USING BTREE
+  INDEX `IDINDEX`(`TEAMID`, `TEAMINDEX`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -72,15 +72,16 @@ CREATE TABLE `tq_role` (
   `ROLEID` varchar(32) NOT NULL,
   `ROLENAME` varchar(45) NOT NULL COMMENT '角色名称',
   `ROLEDESC` varchar(200) DEFAULT NULL COMMENT '角色描述',
+	`ROLECODE` varchar(200) NOT NULL COMMENT 'CODE',
   PRIMARY KEY (`ROLEID`),
   UNIQUE KEY `ROLEID_UNIQUE` (`ROLEID`),
   UNIQUE KEY `ROLENAME_UNIQUE` (`ROLENAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- 初始化部分角色
-insert into tq_role values("b81f82517bfc4a19a34cf371ab25215c", "超级管理员", "拥有最高权限");
-insert into tq_role values("5b80a08627e14caaa05509c529ca729b", "一般管理员", "拥有一定权限");
-insert into tq_role values("0e4f6efd59c8475e846a8d1002e657da", "普通用户", "只可操作自己的东西");
+insert into tq_role values("b81f82517bfc4a19a34cf371ab25215c", "超级管理员", "拥有最高权限", "ADMIN");
+insert into tq_role values("5b80a08627e14caaa05509c529ca729b", "一般管理员", "拥有一定权限", "ADMIN_A");
+insert into tq_role values("0e4f6efd59c8475e846a8d1002e657da", "普通用户", "只可操作自己的东西", "USER");
 
 -- 账户表 ， 一个用户对应多个账户
 select * from tq_accounts;
@@ -142,15 +143,22 @@ DROP TABLE IF EXISTS `tq_menu`;
 CREATE TABLE `tq_menu`  (
   `MENUID` int(11) NOT NULL AUTO_INCREMENT COMMENT '菜单id',
   `MENUNAME` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
-  `SUPERID` int(11) NULL DEFAULT NULL COMMENT '上级菜单id',
+  `PARENTID` int(11) NULL DEFAULT NULL COMMENT '上级菜单id',
   `URL` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单地址',
   `ICON` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `INDEX` int(255) NULL DEFAULT NULL COMMENT '排序',
+  `MENUINDEX` int(255) NULL DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`MENUID`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+select * from tq_menu;
+-- 初始化菜单数据
+insert into tq_menu(menuname,PARENTID,URL,ICON,MENUINDEX) VALUES('统计分析', 0, '', '', 1);
+insert into tq_menu(menuname,PARENTID,URL,ICON,MENUINDEX) VALUES('用户', 0, '', '', 2);
+insert into tq_menu(menuname,PARENTID,URL,ICON,MENUINDEX) VALUES('菜单', 0, '', '', 3);
+insert into tq_menu(menuname,PARENTID,URL,ICON,MENUINDEX) VALUES('test', 9, '', '', 3);
+UPDATE 
 -- ----角色与菜单和操作的对应关系---
 -- 角色join菜单表table
 
@@ -159,5 +167,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- 菜单join操作表table
 
+show variables like 'character_set_database';
 
 
+select version();

@@ -34,7 +34,7 @@
 
     <select id="loadRoleByUserId" resultType="com.homolo.homolo.entity.system.Role">
         <![CDATA[
-            SELECT ur.userid userid, ro.roleid roleid, ro.rolename rolename, ro.roledesc roledesc from tq_user_role ur left join tq_role ro on ur.roleid = ro.roleid where ur.userid = #{userid}
+            SELECT ur.userid userid, ro.roleid roleid, ro.rolename rolename, ro.roledesc roledesc, ro.rolecode rolecode from tq_user_role ur left join tq_role ro on ur.roleid = ro.roleid where ur.userid = #{userid}
         ]]>
     </select>
 

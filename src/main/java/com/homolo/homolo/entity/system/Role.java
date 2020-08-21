@@ -11,6 +11,7 @@ public class Role implements Serializable {
     private String roledesc;
     private String userid;
     private String roleid;
+    private String rolecode;
 
     public String getRolename() {
         return rolename;
@@ -42,5 +43,13 @@ public class Role implements Serializable {
 
     public void setRoleid(String roleid) {
         this.roleid = roleid;
+    }
+
+    public String getRolecode() {
+        return rolecode;
+    }
+
+    public void setRolecode(String rolecode) {
+        this.rolecode = rolecode;
     }
 }

@@ -10,7 +10,9 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,18 +53,21 @@ public class UserDateilServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("id存在，但是用户不存在");
 		}
 		//查询权限
+//		List<GrantedAuthority> authorities = new ArrayList<>();
 		List<Role> roles = this.userServiceDao.loadRoleByUserId(userInfo.getUserid());
 		userInfo.setRoles(roles);
-		StringBuilder roleNames = new StringBuilder();
+		StringBuilder roleCodes = new StringBuilder();
 		roles.forEach(r -> {
-			roleNames.append(r.getRolename());
-			roleNames.append(",");
+//			authorities.add(new SimpleGrantedAuthority(r.getRolecode()));
+			roleCodes.append(r.getRolecode());
+			roleCodes.append(",");
 		});
 		//设置username.
 		userInfo.setUsername(map.get("username").toString());
 		//在此构造方法处设置用户的锁定，禁用,设置用户角色等
 //		User user  = new User(userInfo.getUsername(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
-		User user  = new User(userInfo.getUsername(), userInfo.getPassword(), userInfo.getDisabledBool(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(roleNames.toString()));
+//		User user  = new User(userInfo.getUsername(), userInfo.getPassword(), userInfo.getDisabledBool(), true, true, true, authorities);
+		User user  = new User(userInfo.getUsername(), userInfo.getPassword(), userInfo.getDisabledBool(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(roleCodes.toString()));
 
 		userInfo.setUser(user);
 		return userInfo;
