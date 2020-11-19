@@ -169,5 +169,8 @@ UPDATE
 
 show variables like 'character_set_database';
 
-
 select version();
+
+SELECT * from tq_menu;
+
+
